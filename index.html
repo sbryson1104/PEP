@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algebra Practice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Style/main.css" id="active-style" />
+</head>
+<body>
+
+  <!-- 🔷 Top Navigation Tabs -->
+  <div class="top-tabs">
+    <button class="tab-button active" data-tab="main">Move Rule Practice</button>
+    <button class="tab-button" data-tab="geometry">Surface Area / Volume</button>
+    <button class="tab-button" data-tab="ohm">Ohm's Law</button>
+  </div>
+  
+  <!-- 🧩 Move Rule Practice Tab -->
+  <div id="main-tab-wrapper" class="tab-wrapper active">
+    <div class="settings" id="main-settings">
+      <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
+      <div class="settings-body" id="settings-body-main">
+        <label class="toggle-switch">
+          <input type="checkbox" id="enable-timer-main" />
+          <span class="slider"></span>
+          <span class="toggle-label">Show Timer</span>
+        </label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="enable-score-main" />
+          <span class="slider"></span>
+          <span class="toggle-label">Show Score</span>
+        </label>
+        <div class="problem-count-wrapper">
+          <span class="toggle-label">Problem Count:</span>
+          <button type="button" class="count-btn minus">−</button>
+          <input type="number" id="problem-count-main" min="1" max="15" value="4" />
+          <button type="button" class="count-btn plus">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button onclick="renderProblems()">Set Problems</button>
+      <button onclick="showAllAnswers()">Show All Answers</button>
+      <div id="timer-main" class="timer" style="display:none;"></div>
+      <div id="score-main" class="score" style="display:none;">Score: 0 / 4</div>
+    </div>
+
+    <div id="main-problems"></div>
+  </div>
+
+  <!-- 🧩 Surface Area / Volume Tab -->
+  <div id="geometry-tab-wrapper" class="tab-wrapper">
+    <div class="settings" id="geometry-settings">
+      <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
+      <div class="settings-body" id="settings-body-geometry">
+        <label class="toggle-switch">
+          <input type="checkbox" id="enable-timer-geometry" />
+          <span class="slider"></span>
+          <span class="toggle-label">Show Timer</span>
+        </label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="enable-score-geometry" />
+          <span class="slider"></span>
+          <span class="toggle-label">Show Score</span>
+        </label>
+        <div class="problem-count-wrapper">
+          <span class="toggle-label">Problem Count:</span>
+          <button type="button" class="count-btn minus">−</button>
+          <input type="number" id="problem-count-geometry" min="1" max="15" value="4" />
+          <button type="button" class="count-btn plus">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button onclick="renderGeometryTab()">Set Problems</button>
+      <button onclick="showAllSurfaceAnswers()">Show All Answers</button>
+      <div id="timer-geometry" class="timer" style="display:none;"></div>
+      <div id="score-geometry" class="score" style="display:none;">Score: 0 / 4</div>
+    </div>
+
+    <div id="geometry-problems"></div>
+  </div>
+
+  <!-- 🔌 Ohm's Law Tab -->
+<div id="ohm-tab-wrapper" class="tab-wrapper">
+  <div class="settings" id="ohm-settings">
+    <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
+    <div class="settings-body" id="settings-body-ohm">
+      <label class="toggle-switch">
+        <input type="checkbox" id="enable-timer-ohm" />
+        <span class="slider"></span>
+        <span class="toggle-label">Show Timer</span>
+      </label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="enable-score-ohm" />
+        <span class="slider"></span>
+        <span class="toggle-label">Show Score</span>
+      </label>
+      <div class="problem-count-wrapper">
+        <span class="toggle-label">Problem Count:</span>
+        <button type="button" class="count-btn minus">−</button>
+        <input type="number" id="problem-count-ohm" min="1" max="15" value="4" />
+        <button type="button" class="count-btn plus">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="renderOhmTab()">Set Problems</button>
+    <button onclick="showAllOhmAnswers()">Show All Answers</button>
+    <div id="timer-ohm" class="timer" style="display:none;"></div>
+    <div id="score-ohm" class="score" style="display:none;">Score: 0 / 4</div>
+  </div>
+
+  <div id="ohm-problems"></div>
+</div>
+
+  <script src="../Script/main.js" id="active-script"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const buttons = document.querySelectorAll(".tab-button");
+      const tabWrappers = {
+  main: document.getElementById("main-tab-wrapper"),
+  geometry: document.getElementById("geometry-tab-wrapper"),
+  ohm: document.getElementById("ohm-tab-wrapper"),
+};
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const tab = btn.getAttribute("data-tab");
+
+          Object.values(tabWrappers).forEach(w => w.classList.remove("active"));
+          tabWrappers[tab].classList.add("active");
+
+          buttons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+    });
+  </script>
+</body>
+</html>
