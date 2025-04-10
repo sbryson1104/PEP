@@ -213,6 +213,7 @@ button:hover {
 
 #main-problems,
 #geometry-problems,
+#faraday-problems,
 #ohm-problems {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -222,19 +223,20 @@ button:hover {
   width: 100%;
   justify-content: center;
   margin: 0 auto;
-  transform: translateX(-22px);
 }
 
 /* 🔷 Shared Problem Card */
 .problem {
+  max-width: 480px;
   width: 100%;
-  max-width: 500px;
-  padding: 15px;
-  margin: 10px auto;
+  padding: 25px;
   border: 2px solid #2b74e2;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #2b74e2;
+  border-radius: 12px;
   background-color: #000210;
+  box-shadow: 0 0 12px #2b74e2;
+  font-size: 1rem;
+  line-height: 1.6;
+  transform: translateX(-22px);
 }
 /* ✏️ Answer Area */
 .answer-box {
@@ -357,3 +359,122 @@ button:hover {
   align-items: center; /* vertical centering */
   transform: translateY(-4px); /* move it up slightly */
 }
+
+/* 🌟 Faraday Chart Panel */
+.chart-box {
+  border: 2px solid #204060;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #101a2b;
+  box-shadow: 0 0 10px #004466;
+  color: #a0d8ff;
+  font-size: 0.95rem;
+  max-width: 300px;
+}
+
+.chart-box label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: #5ecbff;
+}
+
+.metal-selector {
+  width: 100%;
+  padding: 6px;
+  border-radius: 8px;
+  background: #0e1e2b;
+  color: #ffffff;
+  border: 1px solid #5ecbff;
+  margin-bottom: 1rem;
+}
+
+.metal-info div {
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+/* 🌟 Faraday Chart Panel */
+
+/* 🌐 Faraday Layout Customizations */
+.metal-chart-wrapper {
+  position: absolute;
+  top: 70px; /* just below tab bar */
+  right: 40px;
+  z-index: 0;
+  display: none; /* hidden by default */
+}
+
+#metal-chart {
+  background: #101a2b;
+  border: 2px solid #204060;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 10px #004466;
+  min-width: 260px;
+  max-width: 320px;
+}
+
+.faraday-layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+.faraday-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.periodic-table-btn {
+  margin-top: 12px;
+  padding: 6px 12px;
+  font-weight: bold;
+  background: #0e1e2b;
+  color: #a0d8ff;
+  border: 1px solid #5ecbff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.periodic-table-btn:hover {
+  background: #1a2f44;
+}
+
+.periodic-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.periodic-overlay img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  transform-origin: center;
+  transition: transform 0.1s ease;
+}
+
+.close-overlay {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 28px;
+  background: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+

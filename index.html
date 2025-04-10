@@ -6,15 +6,71 @@
   <title>Algebra Practice</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="Style/main.css" id="active-style" />
+  <script src="https://player.vimeo.com/api/player.js"></script> <!-- ✅ Keep only this one -->
 </head>
 <body>
 
-  <!-- 🔷 Top Navigation Tabs -->
+  <!-- ✅ Top Navigation Tabs -->
   <div class="top-tabs">
     <button class="tab-button active" data-tab="main">Move Rule Practice</button>
     <button class="tab-button" data-tab="geometry">Surface Area / Volume</button>
     <button class="tab-button" data-tab="ohm">Ohm's Law</button>
+    <button class="tab-button" data-tab="faraday">Faraday's Law</button>
+    <button class="tab-button" data-tab="videos">Videos</button>
   </div>
+
+  <!-- ✅ Video Tab Wrapper -->
+  <div id="videos-tab-wrapper" class="tab-wrapper">
+    <div class="controls">
+      <label for="video-select">Choose a Video:</label>
+      <select id="video-select">
+        <option value="">-- Select Video --</option>
+        <option value="364792031">Plating Essentials 06 - Electrochemistry</option>
+        <option value="371427894">Plating Essentials 07 - Anodes and Racks</option>
+        <option value="367027975">Plating Essentials 08 - Rack care and Maintenance</option>
+        <option disabled>──────────</option>
+        <option disabled>Plating Essentials 01–05 coming soon</option>
+        <option disabled>Plating Essentials 09–10 coming soon</option>
+      </select>
+    </div>
+
+    <div class="video-container" style="position: relative; max-width: 800px; margin: 2rem auto;">
+      <iframe 
+        id="vimeo-player" 
+        src="https://player.vimeo.com/video/364792031?controls=0&transparent=0" 
+        frameborder="0" 
+        allow="autoplay; fullscreen; picture-in-picture" 
+        allowfullscreen
+        style="width: 100%; height: 450px; background: #000;">
+      </iframe>
+
+      <!-- 🎛 Custom Controls -->
+      <div id="custom-controls" style="position: absolute; bottom: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px;">
+        <button id="play-pause" style="font-size: 1.6rem; padding: 8px 14px;">▶️</button>
+        <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1" style="flex: 1; accent-color: purple;">
+        <span id="current-time" style="color: white; font-size: 0.9rem;">0:00</span>
+        <button id="mute-btn">🔈</button>
+        <button id="pip-btn">📺</button>
+        <button id="fullscreen-btn">⛶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay Blocker for loading -->
+  <div class="video-blocker" style="
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events: none;
+    background: transparent;
+    z-index: 5;">
+  </div>
+  <!-- 🌟 Chart Top-Right (only shows on Faraday tab) -->
+<div class="metal-chart-wrapper" id="chart-container">
+  <div id="metal-chart"></div>
+</div>
   
   <!-- 🧩 Move Rule Practice Tab -->
   <div id="main-tab-wrapper" class="tab-wrapper active">
@@ -118,15 +174,65 @@
   <div id="ohm-problems"></div>
 </div>
 
+<!-- ⚡ Faraday's Law Tab -->
+<div id="faraday-tab-wrapper" class="tab-wrapper">
+
+  <!-- ⚙️ Settings Panel -->
+  <div class="settings" id="faraday-settings">
+    <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
+    <div class="settings-body" id="settings-body-faraday">
+      <label class="toggle-switch">
+        <input type="checkbox" id="enable-timer-faraday" />
+        <span class="slider"></span>
+        <span class="toggle-label">Show Timer</span>
+      </label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="enable-score-faraday" />
+        <span class="slider"></span>
+        <span class="toggle-label">Show Score</span>
+      </label>
+      <div class="problem-count-wrapper">
+        <span class="toggle-label">Problem Count:</span>
+        <button type="button" class="count-btn minus">−</button>
+        <input type="number" id="problem-count-faraday" min="1" max="15" value="4" />
+        <button type="button" class="count-btn plus">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔧 Controls + Problems -->
+  <div class="faraday-layout">
+    <div class="faraday-left">
+      <div class="controls">
+        <button onclick="renderFaradayTab()">Set Problems</button>
+        <button onclick="showAllFaradayAnswers()">Show All Answers</button>
+        <div id="timer-faraday" class="timer" style="display:none;"></div>
+        <div id="score-faraday" class="score" style="display:none;">Score: 0 / 4</div>
+      </div>
+      <div id="faraday-problems"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 🌐 Periodic Table Overlay -->
+<div id="periodic-overlay" class="periodic-overlay">
+  <button class="close-overlay">✕</button>
+  <img id="periodic-image" src="Images/PeriodicTable.png" alt="Periodic Table">
+</div>
+
   <script src="../Script/main.js" id="active-script"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const buttons = document.querySelectorAll(".tab-button");
       const tabWrappers = {
-  main: document.getElementById("main-tab-wrapper"),
-  geometry: document.getElementById("geometry-tab-wrapper"),
-  ohm: document.getElementById("ohm-tab-wrapper"),
-};
+        main: document.getElementById("main-tab-wrapper"),
+        geometry: document.getElementById("geometry-tab-wrapper"),
+        ohm: document.getElementById("ohm-tab-wrapper"),
+        faraday: document.getElementById("faraday-tab-wrapper"),
+        videos: document.getElementById("videos-tab-wrapper")
+      };
+
+      const chartContainer = document.getElementById("chart-container");
 
       buttons.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -137,10 +243,15 @@
 
           buttons.forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
+
+          chartContainer.style.display = tab === "faraday" ? "block" : "none";
+          if (tab === "faraday") buildMetalChart();
         });
       });
-    }); 
+    });
   </script>
-    <script src="Script/main.js"></script>
+
+  <!-- ✅ Main JavaScript -->
+  <script src="../Script/main.js" id="active-script"></script>
 </body>
 </html>

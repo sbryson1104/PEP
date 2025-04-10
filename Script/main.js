@@ -29,7 +29,9 @@ function toggleSettingsPanel(headerElement) {
   }
 }
 
-// ✅ Move Rule Problem Renderer
+//////////////////////////
+////// MoveRule TAB //////
+//////////////////////////
 function renderProblems() {
   clearInterval(timerInterval);
   score = 0;
@@ -148,8 +150,9 @@ function showAllAnswers() {
 }
 
 
-// 🔁 Continue with Part 2 (Surface Area / Volume + Event Hooks)?
-// ✅ Surface Area / Volume Renderer
+////////////////////////////////
+////// Surface/Volume TAB //////
+////////////////////////////////
 function renderGeometryTab() {
   clearInterval(timerInterval);
   score = 0;
@@ -545,6 +548,316 @@ function showAllOhmAnswers() {
   });
 }
 
+//////////////////////////////
+////// Faradays law TAB //////
+//////////////////////////////
+function renderFaradayTab() {
+  const container = document.getElementById("faraday-problems");
+  container.innerHTML = "";
+
+  clearInterval(timerInterval);
+  score = 0;
+
+  const count = parseInt(document.getElementById("problem-count-faraday").value, 10) || 4;
+
+  const timerOn = document.getElementById("enable-timer-faraday").checked;
+  const scoreOn = document.getElementById("enable-score-faraday").checked;
+  const timerEl = document.getElementById("timer-faraday");
+  const scoreEl = document.getElementById("score-faraday");
+
+  timerEl.style.display = timerOn ? "block" : "none";
+  scoreEl.style.display = scoreOn ? "block" : "none";
+  scoreEl.textContent = `Score: 0 / ${count}`;
+
+  if (timerOn) {
+    let time = 0;
+    timerEl.textContent = "Time: 0s";
+    timerInterval = setInterval(() => {
+      time++;
+      timerEl.textContent = `Time: ${time}s`;
+    }, 1000);
+  }
+
+  for (let i = 0; i < count; i++) {
+    const metal = faradayMetals[Math.floor(Math.random() * faradayMetals.length)];
+    const I = Math.floor(Math.random() * 91 + 10);
+    const t = Math.floor(Math.random() * 5 + 1);
+    const A = Math.floor(Math.random() * 6 + 1);
+    const e = 1.0;
+    const solveType = Math.random() < 0.2 ? "mass" : ["thickness", "ampHours", "area"][Math.floor(Math.random() * 3)];
+
+    let question = "", answer = 0, formula = "";
+
+    if (solveType === "mass") {
+      const tSec = t * 3600;
+      answer = (I * tSec * metal.mass) / (metal.valence * 96485);
+      question = `
+        <div style="text-align:center;"><strong>Metal: ${metal.name}</strong></div>
+        <div style="margin-top:8px;">I = ${I} A t = ${t} hr M = ${metal.mass} g/mol n = ${metal.valence}</div>
+        <div><strong>Solve for mass (g)</strong></div>
+        <div class="formula">m = (I × t × M) / (n × F)</div>
+      `;
+    } else {
+      if (solveType === "thickness") {
+        answer = (I * t * e) / (metal.constant * A);
+        formula = `F = I·t·e / T·A = ?`;
+        question = `
+          <div style="text-align:center;"><strong>Metal: ${metal.name}</strong></div>
+          <div style="margin-top:8px;">I = ${I} A t = ${t} hr e = ${e} A = ${A} ft² T = ?</div>
+          <div class="formula">${formula}</div>
+          <div><strong>Solve for thickness (mils)</strong></div>
+        `;
+      } else if (solveType === "ampHours") {
+        const T = Math.random() * 5 + 0.5;
+        answer = (T * metal.constant * A) / (e * t);
+        formula = `F = I·t·e / T·A = ?`;
+        question = `
+          <div style="text-align:center;"><strong>Metal: ${metal.name}</strong></div>
+          <div style="margin-top:8px;">T = ${T.toFixed(2)} mils t = ${t} hr e = ${e} A = ${A} ft² I = ?</div>
+          <div class="formula">${formula}</div>
+          <div><strong>Solve for current (amps)</strong></div>
+        `;
+      } else if (solveType === "area") {
+        const T = Math.random() * 5 + 0.5;
+        answer = (I * t * e) / (metal.constant * T);
+        formula = `F = I·t·e / T·A = ?`;
+        question = `
+          <div style="text-align:center;"><strong>Metal: ${metal.name}</strong></div>
+          <div style="margin-top:8px;">I = ${I} A t = ${t} hr e = ${e} T = ${T.toFixed(2)} mils A = ?</div>
+          <div class="formula">${formula}</div>
+          <div><strong>Solve for area (ft²)</strong></div>
+        `;
+      }
+    }
+
+    const problem = document.createElement("div");
+    problem.className = "problem";
+    problem.innerHTML = `
+      ${question}
+      <div class="answer-input-wrapper">
+        <input type="number" class="user-answer" placeholder="Your answer">
+        <button class="show-btn">Show Answer</button>
+        <div class="answer-box" style="display:none;">Correct Answer: ${answer.toFixed(2)}</div>
+      </div>
+    `;
+
+    const btn = problem.querySelector(".show-btn");
+    const input = problem.querySelector(".user-answer");
+    const box = problem.querySelector(".answer-box");
+
+    btn.addEventListener("click", () => {
+      const userVal = parseFloat(input.value);
+      const isCorrect = Math.abs(userVal - answer) < 0.05;
+
+      input.classList.remove("correct", "incorrect");
+      input.classList.add(isCorrect ? "correct" : "incorrect");
+
+      if (isCorrect && scoreOn) {
+        score++;
+        scoreEl.textContent = `Score: ${score} / ${count}`;
+      }
+
+      box.style.display = "block";
+    });
+
+    container.appendChild(problem);
+  }
+}
+
+const faradayMetals = [
+  { name: "Nickel", valence: 2, constant: 18.7, mass: 58.69, notes: "Common corrosion protection" },
+  { name: "Copper", valence: 2, constant: 15.7, mass: 63.55, notes: "Conductive, fast build-up" },
+  { name: "Silver", valence: 1, constant: 19.3, mass: 107.87, notes: "Decorative, conductive" },
+  { name: "Gold", valence: 1, constant: 20.0, mass: 196.97, notes: "Tarnish-proof, electronics" },
+  { name: "Cobalt", valence: 2, constant: 20.7, mass: 58.93, notes: "Hard, durable finish" },
+  { name: "Lead", valence: 2, constant: 10.5, mass: 207.2, notes: "Soft, protective" },
+  { name: "Palladium", valence: 2, constant: 22.0, mass: 106.42, notes: "Electronics, anti-corrosive" },
+  { name: "Chromium", valence: 6, constant: 40.0, mass: 51.996, notes: "Hard chrome, low efficiency" },
+  { name: "Zinc", valence: 2, constant: 11.5, mass: 65.38, notes: "Rust protection" },
+  { name: "Tin", valence: 2, constant: 12.0, mass: 118.71, notes: "Food-safe, solder-friendly" },
+  { name: "Rhodium", valence: 3, constant: 24.0, mass: 102.91, notes: "Jewelry, brilliant finish" },
+  { name: "Platinum", valence: 2, constant: 25.0, mass: 195.08, notes: "High-end electrical" },
+  { name: "Cadmium", valence: 2, constant: 13.0, mass: 112.41, notes: "Aerospace use" },
+  { name: "Iron", valence: 2, constant: 10.0, mass: 55.85, notes: "Rarely plated alone" }
+];
+
+function buildMetalChart() {
+  const chart = document.getElementById("metal-chart");
+  chart.innerHTML = "";
+
+  const dropdown = document.createElement("select");
+  dropdown.className = "metal-selector";
+  dropdown.innerHTML = faradayMetals.map(m =>
+    `<option value="${m.name}">${m.name}</option>`
+  ).join("");
+
+  const infoBox = document.createElement("div");
+  const chartBox = document.createElement("div");
+  chartBox.className = "chart-box";
+  chartBox.innerHTML = `<label for="metal-dropdown">Select Metal:</label>`;
+  chartBox.appendChild(dropdown);
+  chartBox.appendChild(infoBox);
+  chart.appendChild(chartBox);
+
+  const showTableBtn = document.createElement("button");
+showTableBtn.textContent = "Show Periodic Table";
+showTableBtn.className = "periodic-table-btn";
+showTableBtn.addEventListener("click", () => {
+  document.getElementById("periodic-overlay").style.display = "flex";
+});
+chartBox.appendChild(showTableBtn);
+
+  function updateChart(selected) {
+    const metal = faradayMetals.find(m => m.name === selected);
+    infoBox.innerHTML = `
+      <div><strong>Constant (F):</strong> ${metal.constant}</div>
+      <div><strong>Valence:</strong> ${metal.valence}</div>
+      <div><strong>Molar Mass:</strong> ${metal.mass} g/mol</div>
+      <div><strong>Notes:</strong> ${metal.notes}</div>
+    `;
+  }
+
+  dropdown.addEventListener("change", () => updateChart(dropdown.value));
+  updateChart(dropdown.value);
+}
+
+// Zoom state
+let zoomLevel = 1;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.getElementById("periodic-overlay");
+  const closeBtn = document.querySelector(".close-overlay");
+  const image = document.getElementById("periodic-image");
+
+  closeBtn.addEventListener("click", () => {
+    overlay.style.display = "none";
+    zoomLevel = 1;
+    image.style.transform = `scale(1)`;
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      overlay.style.display = "none";
+      zoomLevel = 1;
+      image.style.transform = `scale(1)`;
+    }
+  });
+
+  overlay.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    zoomLevel += e.deltaY < 0 ? 0.1 : -0.1;
+    zoomLevel = Math.max(0.5, Math.min(zoomLevel, 5));
+    image.style.transform = `scale(${zoomLevel})`;
+  });
+});
+
+
+
+
+// ✅ VIMEO PLAYER LOGIC
+document.addEventListener("DOMContentLoaded", () => {
+  const iframe = document.getElementById("vimeo-player");
+  if (!iframe) return;
+
+  const videoSelect = document.getElementById("video-select");
+  const playBtn = document.getElementById("play-pause");
+  const seekBar = document.getElementById("seek-bar");
+  const muteBtn = document.getElementById("mute-btn");
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+  const pipBtn = document.getElementById("pip-btn");
+  const currentTimeText = document.getElementById("current-time");
+  const blocker = document.querySelector(".video-blocker");
+
+  const player = new Vimeo.Player(iframe);
+
+  player.on("loaded", () => {
+    blocker.style.display = "none";
+  });
+
+  player.on("play", () => {
+    blocker.style.display = "none";
+    playBtn.textContent = "⏸️";
+  });
+
+  player.on("pause", () => {
+    playBtn.textContent = "▶️";
+  });
+
+  player.on("timeupdate", ({ seconds, duration }) => {
+    seekBar.value = (seconds / duration) * 100;
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
+    currentTimeText.textContent = `${mins}:${secs}`;
+  });
+
+  playBtn.addEventListener("click", () => {
+    player.getPaused().then(paused => {
+      if (paused) {
+        player.play();
+      } else {
+        player.pause();
+      }
+    });
+  });
+
+  muteBtn.addEventListener("click", () => {
+    player.getVolume().then(vol => {
+      if (vol > 0) {
+        player.setVolume(0);
+        muteBtn.textContent = "🔇";
+      } else {
+        player.setVolume(1);
+        muteBtn.textContent = "🔈";
+      }
+    });
+  });
+
+  fullscreenBtn.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+      iframe.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  pipBtn.addEventListener("click", async () => {
+    try {
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture();
+      } else {
+        await iframe.requestPictureInPicture();
+      }
+    } catch (err) {
+      alert("Your browser doesn't support Picture-in-Picture for iframes.");
+    }
+  });
+
+  seekBar.addEventListener("input", () => {
+    player.getDuration().then(duration => {
+      const newTime = (seekBar.value / 100) * duration;
+      player.setCurrentTime(newTime);
+    });
+  });
+
+  videoSelect.addEventListener("change", () => {
+    const videoId = videoSelect.value;
+    if (videoId) {
+      blocker.style.display = "block";
+      player.loadVideo(videoId).catch(err => {
+        console.error("Video load error:", err);
+      });
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
 
 
 
@@ -593,5 +906,10 @@ document.addEventListener("click", (e) => {
     input.value = value;
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  buildMetalChart();
+});
+
 
 
