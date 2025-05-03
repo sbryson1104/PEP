@@ -918,28 +918,28 @@ document.addEventListener("click", (e) => {
 document.addEventListener("DOMContentLoaded", () => {
   buildMetalChart();
 
-  const mobileToggle = document.getElementById("mobileToggle");
-  const topTabs = document.querySelector(".top-tabs");
-
-  // Mobile tab toggle behavior
-  if (mobileToggle && topTabs) {
-    mobileToggle.addEventListener("click", () => {
-      const isShown = topTabs.classList.toggle("mobile-tabs-shown");
-      if (isShown) {
-        mobileToggle.style.display = "none"; // Hide toggle when open
-      }
-    });
-
-    document.querySelectorAll(".tab-button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        if (window.innerWidth <= 768) {
-          topTabs.classList.remove("mobile-tabs-shown");
-          mobileToggle.style.display = "block"; // Show toggle again
-        }
+  document.addEventListener("DOMContentLoaded", () => {
+    const mobileToggle = document.getElementById("mobileToggle");
+    const topTabs = document.querySelector(".top-tabs");
+  
+    if (mobileToggle && topTabs) {
+      mobileToggle.addEventListener("click", () => {
+        const isOpen = topTabs.classList.toggle("mobile-tabs-shown");
+        mobileToggle.classList.toggle("active", isOpen);
       });
-    });
-  }
-
+  
+      // Hide tabs and restore ☰ when a tab is clicked (mobile only)
+      document.querySelectorAll(".tab-button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (window.innerWidth <= 768) {
+            topTabs.classList.remove("mobile-tabs-shown");
+            mobileToggle.classList.remove("active");
+          }
+        });
+      });
+    }
+  });
+  
   // Hide problem count input on mobile
   if (window.innerWidth <= 768) {
     const allProblemInputs = document.querySelectorAll('input[type="number"][id^="problem-count"]');
