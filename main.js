@@ -917,5 +917,21 @@ document.addEventListener("DOMContentLoaded", () => {
   buildMetalChart();
 });
 
+const mobileToggle = document.querySelector('.mobile-tab-toggle');
+const topTabs = document.querySelector('.top-tabs');
+
+mobileToggle.addEventListener('click', () => {
+  topTabs.classList.toggle('mobile-tabs-shown');
+});
+
+if (window.innerWidth <= 768) {
+  const allProblemInputs = document.querySelectorAll('input[type="number"][id^="problem-count"]');
+  allProblemInputs.forEach(input => {
+    input.value = 1;
+    input.max = 1;
+  });
+}
+
+
 
 
