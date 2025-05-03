@@ -478,9 +478,25 @@ button:hover {
   cursor: pointer;
 }
 
+.mobile-tab-toggle {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  body {
-    padding-top: 90px;
+  #main-problems,
+  #geometry-problems,
+  #faraday-problems,
+  #ohm-problems {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 60vh;
+  }
+
+  .problem {
+    max-width: 95%;
+    margin: auto;
   }
 
   .top-tabs {
@@ -510,11 +526,6 @@ button:hover {
     padding: 0 10px;
   }
 
-  .problem {
-    padding: 15px;
-    font-size: 0.95rem;
-  }
-
   .shape-diagram svg {
     max-width: 100%;
     height: auto;
@@ -536,6 +547,15 @@ button:hover {
 
   .answer-input-wrapper {
     gap: 12px;
+  }
+
+  .mobile-tab-toggle {
+    display: block;
+    text-align: left;
+  }
+
+  .mobile-tabs-shown {
+    display: flex !important;
   }
 }
 

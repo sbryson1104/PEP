@@ -8,6 +8,11 @@ function getRandomVar(exclude = []) {
   return variables.filter(v => !exclude.includes(v))[Math.floor(Math.random() * (variables.length - exclude.length))];
 }
 
+// Mobile Functions
+document.querySelector(".mobile-tab-toggle").addEventListener("click", () => {
+  document.querySelector(".top-tabs").classList.toggle("mobile-tabs-shown");
+});
+
 function normalizeInput(str) {
   return str
     .toLowerCase()
@@ -41,6 +46,7 @@ function renderProblems() {
   const timerEl = document.getElementById("timer-main");
   const scoreEl = document.getElementById("score-main");
   const total = parseInt(document.getElementById("problem-count-main").value) || 4;
+  if (window.innerWidth <= 768) total = 1;  // Limit to 1 on mobile
   const container = document.getElementById("main-problems");
 
   container.innerHTML = "";
