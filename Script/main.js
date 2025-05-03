@@ -917,24 +917,26 @@ document.addEventListener("click", (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   buildMetalChart();
-});
 
-const mobileToggle = document.querySelector('.mobile-tab-toggle');
-const topTabs = document.querySelector('.top-tabs');
+  const mobileToggle = document.getElementById("mobileToggle");
+  const topTabs = document.querySelector(".top-tabs");
 
-mobileToggle.addEventListener('click', () => {
-  topTabs.classList.toggle('mobile-tabs-shown');
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  buildMetalChart();
-
-  const mobileToggle = document.querySelector('.mobile-tab-toggle');
-  const topTabs = document.querySelector('.top-tabs');
-
+  // Mobile tab toggle behavior
   if (mobileToggle && topTabs) {
-    mobileToggle.addEventListener('click', () => {
-      topTabs.classList.toggle('mobile-tabs-shown');
+    mobileToggle.addEventListener("click", () => {
+      const isShown = topTabs.classList.toggle("mobile-tabs-shown");
+      if (isShown) {
+        mobileToggle.style.display = "none"; // Hide toggle when open
+      }
+    });
+
+    document.querySelectorAll(".tab-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+          topTabs.classList.remove("mobile-tabs-shown");
+          mobileToggle.style.display = "block"; // Show toggle again
+        }
+      });
     });
   }
 
@@ -950,7 +952,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const allCountWrappers = document.querySelectorAll(".problem-count-wrapper");
     allCountWrappers.forEach(w => w.style.display = "none");
   }
+
+  // Tab switching logic
+  const buttons = document.querySelectorAll(".tab-button");
+  const tabWrappers = {
+    main: document.getElementById("main-tab-wrapper"),
+    geometry: document.getElementById("geometry-tab-wrapper"),
+    ohm: document.getElementById("ohm-tab-wrapper"),
+    faraday: document.getElementById("faraday-tab-wrapper"),
+    videos: document.getElementById("videos-tab-wrapper")
+  };
+
+  const chartContainer = document.getElementById("chart-container");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.getAttribute("data-tab");
+
+      Object.values(tabWrappers).forEach(w => w.classList.remove("active"));
+      tabWrappers[tab].classList.add("active");
+
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      chartContainer.style.display = tab === "faraday" ? "block" : "none";
+      if (tab === "faraday") buildMetalChart();
+    });
+  });
 });
+
 
 
 
