@@ -45,8 +45,10 @@ function renderProblems() {
   const scoreOn = document.getElementById("enable-score-main").checked;
   const timerEl = document.getElementById("timer-main");
   const scoreEl = document.getElementById("score-main");
-  const total = parseInt(document.getElementById("problem-count-main").value) || 4;
-  if (window.innerWidth <= 768) total = 1;  // Limit to 1 on mobile
+  let total = 1;
+if (window.innerWidth > 768) {
+  total = parseInt(document.getElementById("problem-count-main").value) || 4;
+}
   const container = document.getElementById("main-problems");
 
   container.innerHTML = "";
@@ -924,14 +926,31 @@ mobileToggle.addEventListener('click', () => {
   topTabs.classList.toggle('mobile-tabs-shown');
 });
 
-if (window.innerWidth <= 768) {
-  const allProblemInputs = document.querySelectorAll('input[type="number"][id^="problem-count"]');
-  allProblemInputs.forEach(input => {
-    input.value = 1;
-    input.max = 1;
-  });
-}
+document.addEventListener("DOMContentLoaded", () => {
+  buildMetalChart();
 
+  const mobileToggle = document.querySelector('.mobile-tab-toggle');
+  const topTabs = document.querySelector('.top-tabs');
+
+  if (mobileToggle && topTabs) {
+    mobileToggle.addEventListener('click', () => {
+      topTabs.classList.toggle('mobile-tabs-shown');
+    });
+  }
+
+  // Hide problem count input on mobile
+  if (window.innerWidth <= 768) {
+    const allProblemInputs = document.querySelectorAll('input[type="number"][id^="problem-count"]');
+    allProblemInputs.forEach(input => {
+      input.value = 1;
+      input.max = 1;
+      input.style.display = "none";
+    });
+
+    const allCountWrappers = document.querySelectorAll(".problem-count-wrapper");
+    allCountWrappers.forEach(w => w.style.display = "none");
+  }
+});
 
 
 
