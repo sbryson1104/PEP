@@ -330,12 +330,17 @@ button:hover {
   color: #ff6666;
 }
 
-.timer, .score {
-  padding: 5px 10px;
-  background-color: #152a3a;
+.timer,
+.score {
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  background: #111;
+  color: #00b7ff;
+  border: 1px solid #00b7ff;
   border-radius: 6px;
-  font-weight: bold;
-  box-shadow: 0 0 6px #00c8ff;
+  box-shadow: 0 0 8px #00b7ff33;
+  display: inline-block;
+  width: auto;
 }
 
 /* 🔷 Shape Diagrams */
@@ -397,11 +402,53 @@ button:hover {
 
 /* 🌐 Faraday Layout Customizations */
 .metal-chart-wrapper {
-  position: absolute;
-  top: 70px; /* just below tab bar */
+  position: fixed; /* changed from absolute */
+  top: 70px;
   right: 40px;
-  z-index: 0;
-  display: none; /* hidden by default */
+  z-index: 1002; /* higher than .top-tabs */
+  background: #101a2b; /* optional: backdrop */
+  padding: 10px;
+  border-radius: 12px;
+}
+
+#toggle-metal-content {
+  margin-left: auto;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  background-color: #0e1e2b;
+  color: #a0d8ff;
+  border: 1px solid #5ecbff;
+  border-radius: 6px;
+  box-shadow: 0 0 8px #00b7ff;
+  z-index: 1003;
+}
+
+.small-btn {
+  font-size: 0.85rem;
+  padding: 0px 0px;
+  background: #0e1e2b;
+  color: #a0d8ff;
+  border: 1px solid #5ecbff;
+  border-radius: 6px;
+  box-shadow: 0 0 10px #00b7ff;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  line-height: 1;
+  height: 32px;
+}
+
+.small-btn:hover {
+  background-color: #1a2f44;
+  box-shadow: 0 0 0px #00b7ff;
+}
+.top-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#toggle-metal-content:hover {
+  background-color: #1a2f44;
+  box-shadow: 0 0 0px #00b7ff;
 }
 
 #metal-chart {
@@ -478,62 +525,138 @@ button:hover {
   cursor: pointer;
 }
 
-/* Hide mobile toggle on desktop */
-@media (min-width: 769px) {
-  .mobile-tab-toggle {
-    display: none !important;
-  }
+.mobile-tab-toggle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #111;
+  color: #fff;
+  padding: 12px 16px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #333;
+  z-index: 1001;
+  cursor: pointer;
+  text-align: left;
 }
 
-@media (max-width: 768px) {
-  .mobile-tab-toggle {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #111;
-    color: #fff;
-    padding: 12px 16px;
-    font-weight: bold;
-    font-size: 1.2rem;
-    border-bottom: 2px solid #333;
-    z-index: 1001;
-    cursor: pointer;
-    text-align: left;
-  }
+.top-tabs {
+  position: fixed;
+  top: 0;
+  left: -260px; /* Hidden off-screen */
+  height: 100vh;
+  width: 250px;
+  background-color: #111;
+  padding: 20px 10px;
+  flex-direction: column;
+  gap: 12px;
+  border-right: 2px solid #333;
+  z-index: 1000;
+  display: flex;
+  transition: left 0.3s ease;
+  padding: 70px 10px 20px;
+}
 
-  .top-tabs {
-    position: fixed;
-    top: 45px;
-    left: 0;
-    width: 100%;
-    display: none;
-    flex-direction: column;
-    background-color: #111;
-    padding: 10px;
-    border-bottom: 2px solid #333;
-    z-index: 1000;
-  }
+.top-tabs.mobile-tabs-shown {
+  left:0;
+}
 
-  .top-tabs.mobile-tabs-shown {
-    display: flex !important;
-  }
+.quiz-selector-container {
+  max-width: 400px;
+  margin: 60px auto 30px;
+  padding: 20px;
+  background: #0b0f1a;
+  border: 2px solid #00b7ff;
+  border-radius: 20px;
+  box-shadow: 0 0 15px #00b7ff;
+  text-align: center;
+}
 
-  .mobile-tab-toggle {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #222;
-    color: white;
-    padding: 12px 16px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    z-index: 1001;
-    border-bottom: 2px solid #444;
-    cursor: pointer;
-  }  
+.quiz-title {
+  margin-bottom: 15px;
+  color: #a0d8ff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
 
-  @media (max-width: 768px) {
+#quiz-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #0e1e2b;
+  color: #ffffff;
+  border: 1px solid #5ecbff;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 183, 255, 0.4);
+  text-align: center;
+  text-align-last: center;
+}
+
+.quiz-wrapper {
+  max-width: 600px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}  
+
+#quizzes-problems .problem {
+  background: #0e1e2b;
+  border: 2px solid #5ecbff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  color: #a0d8ff;
+  box-shadow: 0 0 10px rgba(0,183,255,0.3);
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}  
+
+#quizzes-problems .answer-input-wrapper {
+  margin-top: 10px;
+}
+
+#quizzes-problems label {
+  display: block;
+  margin: 6px 0;
+  color: #ffffff;
+  text-align: center;
+}
+
+.glow-btn {
+  margin: 0;
+  align-self: center;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+
+#quizzes-problems {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#periodic-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.95);
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-direction: column;
+  pointer-events: auto;
+}
+
+
+ @media (max-width: 768px) {
     #main-problems,
     #geometry-problems,
     #faraday-problems,
@@ -563,10 +686,6 @@ button:hover {
 
   .settings {
     width: 95%;
-    border-radius: 30px;
-  }
-
-  .controls {
     flex-direction: column;
     gap: 10px;
     padding: 10px;
@@ -594,6 +713,101 @@ button:hover {
   .answer-input-wrapper {
     gap: 12px;
   }
+
+  /* 🔹 Centering helpers */
+  .quiz-wrapper,
+#quizzes-problems {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
+
+/* Optional: Limit width for large screens */
+#quizzes-problems .problem,
+.quiz-wrapper .problem {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* 🔹 Tab content fade-in */
+.tab-wrapper {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.tab-wrapper.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 🔹 Problem fade-in */
+.problem {
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* 🔹 Button pulse on click */
+.glow-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 10px #00b7ff, 0 0 20px #00b7ff inset;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+/* 🔹 Smooth glowing hover */
+.glow-btn {
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.glow-btn:hover {
+  box-shadow: 0 0 15px #00b7ff;
+}
+
+/* 🔹 Fade keyframe */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth hover glow */
+.glow-btn {
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Press down effect */
+.glow-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 10px #00b7ff, inset 0 0 6px #00b7ff;
+}
+
+/* Subtle hover shimmer */
+.glow-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.glow-btn:hover::before {
+  left: 130%;
+}
+
+
+  
+  
+  
+
 
 

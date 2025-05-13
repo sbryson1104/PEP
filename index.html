@@ -11,14 +11,17 @@
 <body>
 
   <!-- ✅ Top Navigation Tabs -->
+
   <div class="mobile-tab-toggle" id="mobileToggle">☰</div>
-<div class="top-tabs">
-  <button class="tab-button active" data-tab="main">Move Rule Practice</button>
-  <button class="tab-button" data-tab="geometry">Surface Area / Volume</button>
-  <button class="tab-button" data-tab="ohm">Ohm's Law</button>
-  <button class="tab-button" data-tab="faraday">Faraday's Law</button>
-  <button class="tab-button" data-tab="videos">Videos</button>
-</div>
+  <button id="toggle-metal-content" class="glow-btn small-btn">🧪 Show Metal Content</button>
+  <div class="top-tabs">
+    <button class="tab-button glow-btn active" data-tab="main">Move Rule Practice</button>
+    <button class="tab-button glow-btn" data-tab="geometry">Surface Area / Volume</button>
+    <button class="tab-button glow-btn" data-tab="ohm">Ohm's Law</button>
+    <button class="tab-button glow-btn" data-tab="faraday">Faraday's Law</button>
+    <button class="tab-button glow-btn" data-tab="quizzes">Quizzes</button>
+    <button class="tab-button glow-btn" data-tab="videos">Videos</button>
+  </div>
 
   <!-- ✅ Video Tab Wrapper -->
   <div id="videos-tab-wrapper" class="tab-wrapper">
@@ -44,6 +47,7 @@
         allowfullscreen
         style="width: 100%; height: 450px; background: #000;">
       </iframe>
+      
 
       <!-- 🎛 Custom Controls -->
       <div id="custom-controls" style="position: absolute; bottom: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px;">
@@ -98,8 +102,8 @@
     </div>
 
     <div class="controls">
-      <button onclick="renderProblems()">Set Problems</button>
-      <button onclick="showAllAnswers()">Show All Answers</button>
+ <button class="glow-btn" onclick="renderProblems()">Set Problems</button>
+    <button class="glow-btn" onclick="showAllAnswers()">Show All Answers</button>
       <div id="timer-main" class="timer" style="display:none;"></div>
       <div id="score-main" class="score" style="display:none;">Score: 0 / 4</div>
     </div>
@@ -132,8 +136,8 @@
     </div>
 
     <div class="controls">
-      <button onclick="renderGeometryTab()">Set Problems</button>
-      <button onclick="showAllSurfaceAnswers()">Show All Answers</button>
+      <button class="glow-btn" onclick="renderGeometryTab()">Set Problems</button>
+      <button class="glow-btn" onclick="showAllSurfaceAnswers()">Show All Answers</button>
       <div id="timer-geometry" class="timer" style="display:none;"></div>
       <div id="score-geometry" class="score" style="display:none;">Score: 0 / 4</div>
     </div>
@@ -166,13 +170,27 @@
   </div>
 
   <div class="controls">
-    <button onclick="renderOhmTab()">Set Problems</button>
-    <button onclick="showAllOhmAnswers()">Show All Answers</button>
+    <button class="glow-btn" onclick="renderOhmTab()">Set Problems</button>
+    <button class="glow-btn" onclick="showAllOhmAnswers()">Show All Answers</button>
     <div id="timer-ohm" class="timer" style="display:none;"></div>
     <div id="score-ohm" class="score" style="display:none;">Score: 0 / 4</div>
   </div>
 
   <div id="ohm-problems"></div>
+</div>
+
+<!-- ⚡ Quizzes -->
+<div id="quizzes-tab-wrapper" class="tab-wrapper">
+  <div class="quiz-selector-container">
+    <h2 class="quiz-title">📘 Select Quiz</h2>
+    <select id="quiz-select">
+      <option value="quiz1">quiz1</option>
+      <option value="quiz2">AESF Plating Quiz 2</option>
+      <option value="quiz3">quiz3</option>
+      <option value="quiz4">quiz4</option>
+    </select>
+  </div>
+  <div id="quizzes-problems"></div>
 </div>
 
 <!-- ⚡ Faraday's Law Tab -->
@@ -202,11 +220,9 @@
   </div>
 
   <!-- 🔧 Controls + Problems -->
-  <div class="faraday-layout">
-    <div class="faraday-left">
       <div class="controls">
-        <button onclick="renderFaradayTab()">Set Problems</button>
-        <button onclick="showAllFaradayAnswers()">Show All Answers</button>
+        <button class="glow-btn" onclick="renderFaradayTab()">Set Problems</button>
+        <button class="glow-btn" onclick="showAllFaradayAnswers()">Show All Answers</button>
         <div id="timer-faraday" class="timer" style="display:none;"></div>
         <div id="score-faraday" class="score" style="display:none;">Score: 0 / 4</div>
       </div>
@@ -221,36 +237,6 @@
   <img id="periodic-image" src="Images/PeriodicTable.png" alt="Periodic Table">
 </div>
 
-  <script src="../Script/main.js" id="active-script"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const buttons = document.querySelectorAll(".tab-button");
-      const tabWrappers = {
-        main: document.getElementById("main-tab-wrapper"),
-        geometry: document.getElementById("geometry-tab-wrapper"),
-        ohm: document.getElementById("ohm-tab-wrapper"),
-        faraday: document.getElementById("faraday-tab-wrapper"),
-        videos: document.getElementById("videos-tab-wrapper")
-      };
-
-      const chartContainer = document.getElementById("chart-container");
-
-      buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          const tab = btn.getAttribute("data-tab");
-
-          Object.values(tabWrappers).forEach(w => w.classList.remove("active"));
-          tabWrappers[tab].classList.add("active");
-
-          buttons.forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-
-          chartContainer.style.display = tab === "faraday" ? "block" : "none";
-          if (tab === "faraday") buildMetalChart();
-        });
-      });
-    });
-  </script>
 
   <!-- ✅ Main JavaScript -->
   <script src="../Script/main.js" id="active-script"></script>

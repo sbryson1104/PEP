@@ -8,11 +8,6 @@ function getRandomVar(exclude = []) {
   return variables.filter(v => !exclude.includes(v))[Math.floor(Math.random() * (variables.length - exclude.length))];
 }
 
-// Mobile Functions
-document.querySelector(".mobile-tab-toggle").addEventListener("click", () => {
-  document.querySelector(".top-tabs").classList.toggle("mobile-tabs-shown");
-});
-
 function normalizeInput(str) {
   return str
     .toLowerCase()
@@ -759,8 +754,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+const toggleBtn = document.getElementById("toggle-metal-content");
+const chartWrapper = document.querySelector(".metal-chart-wrapper");
 
-
+if (toggleBtn && chartWrapper) {
+  toggleBtn.addEventListener("click", () => {
+    const isVisible = chartWrapper.style.display === "block";
+    chartWrapper.style.display = isVisible ? "none" : "block";
+    toggleBtn.textContent = isVisible ? "🧪 Show Metal Content" : "✖️ Hide Metal Content";
+  });
+}
 
 // ✅ VIMEO PLAYER LOGIC
 document.addEventListener("DOMContentLoaded", () => {
@@ -858,6 +861,146 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// ✅ quiz logic
+
+const quizScoreHistory = {
+  quiz2: []
+};
+
+// Create score tracker UI
+const scoreWrapper = document.createElement("div");
+scoreWrapper.id = "quiz-score-bar";
+scoreWrapper.style.cssText = `
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 50px;
+  display: none;
+  align-items: center;
+  padding: 0 15px;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #a0d8ff;
+  font-weight: bold;
+  font-family: Orbitron, sans-serif;
+  z-index: 2000;
+`;
+scoreWrapper.innerHTML = `
+  <span id="quiz-score-display">Score: 0/0 (0%)</span>
+`;
+document.body.appendChild(scoreWrapper);
+
+// Show/hide score bar based on top-level tab
+const topTabButtons = document.querySelectorAll(".tab-button");
+topTabButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const isQuizzesTab = btn.dataset.tab === "quizzes";
+    scoreWrapper.style.display = isQuizzesTab ? "flex" : "none";
+  });
+});
+
+document.getElementById("quiz-select").addEventListener("change", function () {
+  const selected = this.value;
+  const quizWrapper = document.createElement("div");
+  quizWrapper.className = "quiz-wrapper";
+  const container = document.getElementById("quizzes-problems");
+  container.innerHTML = "";
+  container.appendChild(quizWrapper);
+
+  // Show or hide score bar only for valid quiz selection
+  scoreWrapper.style.display = selected === "quiz2" ? "flex" : "none";
+  document.getElementById("quiz-score-display").textContent = "Score: 0/0 (0%)";
+
+  if (selected === "quiz2") {
+    const questions = [
+      { q: "Molecules are made of a combination of", a: "atoms", options: ["electrons", "protons", "neutrons", "atoms"] },
+      { q: "The lightest of the three basic parts of an atom is the", a: "electron", options: ["electron", "proton", "neutrons", "none of the above"] },
+      { q: "True or False: An unfilled vacancy in the electron structure of an atom makes it non-reactive.", a: "False", options: ["True", "False"] },
+      { q: "When nickel atoms are converted to ions in a chemical reaction, they always change to a valence of:", a: "none of the above", options: ["-2", "+3", "+6", "none of the above"] },
+      { q: "An electroplating cell converts metal ions to the atomic state by:", a: "returning electrons lost when the metal became an ion", options: ["diffusion", "returning electrons lost when the metal became an ion", "subtraction electrons from the atomic structure", "none of the above"] },
+      { q: "Current density is calculated by dividing the current by:", a: "the surface area", options: ["2", "3", "the surface area", "none of the above"] },
+      { q: "If the current density on a plated part is too high the plated deposit might show:", a: "a 'burned' finish", options: ["a 'burned' finish", "a bright finish", "a smooth finish", "none of the above"] },
+      { q: "Using 18.7 for the Faraday factor, calculate the plating time required to deposit 1 mil when plating at 50 amperes per square foot. Assume 100% current efficiency. (Answer in hours)", a: "0.374", input: true },
+      { q: "True or False: Tank anodes should be longer than the longest part in the plating tank.", a: "False", options: ["True", "False"] },
+      { q: "Anode baskets:", a: "All of the above", options: ["Maintain a constant anode surface area", "Need to remain full at all times", "Assure the correct anode current density", "All of the above"] },
+    ];
+
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "problem";
+      div.innerHTML = `
+        <div class="question"><strong>${i + 1}. ${q.q}</strong></div>
+        <div class="answer-input-wrapper">
+          ${q.input
+            ? `<input type="text" data-answer="${q.a}" class="user-answer" placeholder="Your answer">`
+            : q.options.map(opt => `
+              <label>
+                <input type="radio" name="q${i}" value="${opt}" data-answer="${q.a}">
+                ${opt}
+              </label>
+            `).join("<br>")}
+        </div>
+      `;
+      quizWrapper.appendChild(div);
+    });
+
+    const submitBtn = document.createElement("button");
+    submitBtn.textContent = "Submit Quiz";
+    submitBtn.className = "glow-btn";
+    submitBtn.style.marginTop = "30px";
+
+    submitBtn.addEventListener("click", () => {
+      const problems = document.querySelectorAll("#quizzes-problems .problem");
+      let score = 0;
+
+      problems.forEach(problem => {
+        let isCorrect = false;
+        const input = problem.querySelector("input[type='text']");
+
+        if (input) {
+          const correct = input.dataset.answer;
+          const val = input.value.trim();
+          isCorrect = Math.abs(parseFloat(val) - parseFloat(correct)) < 0.01;
+          input.classList.remove("correct", "incorrect");
+          input.classList.add(isCorrect ? "correct" : "incorrect");
+        } else {
+          const selected = problem.querySelector("input[type='radio']:checked");
+          const correct = selected?.dataset.answer;
+          const all = problem.querySelectorAll("input[type='radio']");
+          all.forEach(radio => {
+            radio.classList.remove("correct", "incorrect");
+            if (radio.checked) {
+              isCorrect = radio.value === correct;
+              radio.classList.add(isCorrect ? "correct" : "incorrect");
+            }
+          });
+        }
+
+        if (isCorrect) score++;
+        problem.classList.remove("correct", "incorrect");
+        problem.classList.add(isCorrect ? "correct" : "incorrect");
+      });
+
+      const percent = Math.round((score / questions.length) * 100);
+      document.getElementById("quiz-score-display").textContent = `Score: ${score}/${questions.length} (${percent}%)`;
+      quizScoreHistory.quiz2.unshift({ score, outOf: questions.length, percent });
+      if (quizScoreHistory.quiz2.length > 10) quizScoreHistory.quiz2.pop();
+    });
+
+    quizWrapper.appendChild(submitBtn);
+  } else {
+    scoreWrapper.style.display = "none";
+  }
+});
+
+
+
+
+
+
+
+
+
 
 
 
@@ -918,50 +1061,50 @@ document.addEventListener("click", (e) => {
 document.addEventListener("DOMContentLoaded", () => {
   buildMetalChart();
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const mobileToggle = document.getElementById("mobileToggle");
-    const topTabs = document.querySelector(".top-tabs");
-  
-    if (mobileToggle && topTabs) {
-      mobileToggle.addEventListener("click", () => {
-        const isOpen = topTabs.classList.toggle("mobile-tabs-shown");
-        mobileToggle.classList.toggle("active", isOpen);
-      });
-  
-      // Hide tabs and restore ☰ when a tab is clicked (mobile only)
-      document.querySelectorAll(".tab-button").forEach(btn => {
-        btn.addEventListener("click", () => {
-          if (window.innerWidth <= 768) {
-            topTabs.classList.remove("mobile-tabs-shown");
-            mobileToggle.classList.remove("active");
-          }
-        });
-      });
-    }
-  });
-  
-  // Hide problem count input on mobile
-  if (window.innerWidth <= 768) {
-    const allProblemInputs = document.querySelectorAll('input[type="number"][id^="problem-count"]');
-    allProblemInputs.forEach(input => {
-      input.value = 1;
-      input.max = 1;
-      input.style.display = "none";
+  const mobileToggle = document.getElementById("mobileToggle");
+  const topTabs = document.querySelector(".top-tabs");
+
+  if (mobileToggle && topTabs) {
+    // Toggle menu open/closed when ☰ is clicked
+    mobileToggle.addEventListener("click", () => {
+      const isOpen = topTabs.classList.toggle("mobile-tabs-shown");
+      mobileToggle.classList.toggle("active", isOpen);
     });
 
-    const allCountWrappers = document.querySelectorAll(".problem-count-wrapper");
-    allCountWrappers.forEach(w => w.style.display = "none");
+    // Close menu when any tab is clicked
+    document.querySelectorAll(".tab-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        topTabs.classList.remove("mobile-tabs-shown");
+        mobileToggle.classList.remove("active");
+      });
+    });
   }
 
-  // Tab switching logic
+  // Your existing tab switching logic
   const buttons = document.querySelectorAll(".tab-button");
   const tabWrappers = {
     main: document.getElementById("main-tab-wrapper"),
     geometry: document.getElementById("geometry-tab-wrapper"),
     ohm: document.getElementById("ohm-tab-wrapper"),
     faraday: document.getElementById("faraday-tab-wrapper"),
-    videos: document.getElementById("videos-tab-wrapper")
+    videos: document.getElementById("videos-tab-wrapper"),
+    quizzes: document.getElementById("quizzes-tab-wrapper") // ✅ include this if you added quizzes
   };
+
+    // 🔬 Periodic Table overlay logic
+    const openOverlayBtn = document.querySelector('.periodic-table-btn');
+    const closeOverlayBtn = document.querySelector('.close-overlay');
+    const overlay = document.getElementById('periodic-overlay');
+  
+    if (openOverlayBtn && closeOverlayBtn && overlay) {
+      openOverlayBtn.addEventListener('click', () => {
+        overlay.style.display = 'flex';
+      });
+  
+      closeOverlayBtn.addEventListener('click', () => {
+        overlay.style.display = 'none';
+      });
+    }  
 
   const chartContainer = document.getElementById("chart-container");
 
@@ -980,6 +1123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
 
 
 
