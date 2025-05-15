@@ -4,222 +4,141 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Algebra Practice</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="Style/main.css" id="active-style" />
-  <script src="https://player.vimeo.com/api/player.js"></script> <!-- ✅ Keep only this one -->
+  <script src="https://player.vimeo.com/api/player.js"></script>
 </head>
 <body>
-
-  <!-- ✅ Top Navigation Tabs -->
-
-  <div class="mobile-tab-toggle" id="mobileToggle">☰</div>
-  <button id="toggle-metal-content" class="glow-btn small-btn">🧪 Show Metal Content</button>
-  <div class="top-tabs">
-    <button class="tab-button glow-btn active" data-tab="main">Move Rule Practice</button>
-    <button class="tab-button glow-btn" data-tab="geometry">Surface Area / Volume</button>
-    <button class="tab-button glow-btn" data-tab="ohm">Ohm's Law</button>
-    <button class="tab-button glow-btn" data-tab="faraday">Faraday's Law</button>
-    <button class="tab-button glow-btn" data-tab="quizzes">Quizzes</button>
-    <button class="tab-button glow-btn" data-tab="videos">Videos</button>
-  </div>
-
-  <!-- ✅ Video Tab Wrapper -->
-  <div id="videos-tab-wrapper" class="tab-wrapper">
-    <div class="controls">
-      <label for="video-select">Choose a Video:</label>
-      <select id="video-select">
-        <option value="">-- Select Video --</option>
-        <option value="364792031">Plating Essentials 06 - Electrochemistry</option>
-        <option value="371427894">Plating Essentials 07 - Anodes and Racks</option>
-        <option value="367027975">Plating Essentials 08 - Rack care and Maintenance</option>
-        <option disabled>──────────</option>
-        <option disabled>Plating Essentials 01–05 coming soon</option>
-        <option disabled>Plating Essentials 09–10 coming soon</option>
-      </select>
-    </div>
-
-    <div class="video-container" style="position: relative; max-width: 800px; margin: 2rem auto;">
-      <iframe 
-        id="vimeo-player" 
-        src="https://player.vimeo.com/video/364792031?controls=0&transparent=0" 
-        frameborder="0" 
-        allow="autoplay; fullscreen; picture-in-picture" 
-        allowfullscreen
-        style="width: 100%; height: 450px; background: #000;">
-      </iframe>
-      
-
-      <!-- 🎛 Custom Controls -->
-      <div id="custom-controls" style="position: absolute; bottom: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px;">
-        <button id="play-pause" style="font-size: 1.6rem; padding: 8px 14px;">▶️</button>
-        <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1" style="flex: 1; accent-color: purple;">
-        <span id="current-time" style="color: white; font-size: 0.9rem;">0:00</span>
-        <button id="mute-btn">🔈</button>
-        <button id="pip-btn">📺</button>
-        <button id="fullscreen-btn">⛶</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Overlay Blocker for loading -->
-  <div class="video-blocker" style="
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    pointer-events: none;
-    background: transparent;
-    z-index: 5;">
-  </div>
-  <!-- 🌟 Chart Top-Right (only shows on Faraday tab) -->
-<div class="metal-chart-wrapper" id="chart-container">
-  <div id="metal-chart"></div>
+  <header>
+   <div class="top-bar-buttons">
+  <div style="display: flex; gap: 10px;">
+    <div class="mobile-tab-toggle" id="mobileToggle">☰</div>
+<button id="tools-tab-button" class="tools-icon-btn" title="Tools">
+  <img src="Images/Tools_Icon.png" alt="Tools" class="tools-icon-img">
+</button>  </div>
 </div>
-  
-  <!-- 🧩 Move Rule Practice Tab -->
-  <div id="main-tab-wrapper" class="tab-wrapper active">
-    <div class="settings" id="main-settings">
-      <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
-      <div class="settings-body" id="settings-body-main">
-        <label class="toggle-switch">
-          <input type="checkbox" id="enable-timer-main" />
-          <span class="slider"></span>
-          <span class="toggle-label">Show Timer</span>
-        </label>
-        <label class="toggle-switch">
-          <input type="checkbox" id="enable-score-main" />
-          <span class="slider"></span>
-          <span class="toggle-label">Show Score</span>
-        </label>
-        <div class="problem-count-wrapper">
-          <span class="toggle-label">Problem Count:</span>
-          <button type="button" class="count-btn minus">−</button>
-          <input type="number" id="problem-count-main" min="1" max="15" value="4" />
-          <button type="button" class="count-btn plus">+</button>
+    <nav class="top-tabs">
+      <button class="tab-button glow-btn active" data-tab="main">Move Rule Practice</button>
+      <button class="tab-button glow-btn" data-tab="geometry">Surface Area / Volume</button>
+      <button class="tab-button glow-btn" data-tab="ohm">Ohm's Law</button>
+      <button class="tab-button glow-btn" data-tab="faraday">Faraday's Law</button>
+      <button class="tab-button glow-btn" data-tab="quizzes">Quizzes</button>
+      <button class="tab-button glow-btn" data-tab="videos">Videos</button>
+    </nav>
+  </header>
+  <main>
+    <section id="main-tab-wrapper" class="tab-wrapper active">
+      <div class="settings" id="main-settings">
+        <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
+        <div class="settings-body" id="settings-body-main">
+          <label class="toggle-switch">
+            <input type="checkbox" id="enable-timer-main" />
+            <span class="slider"></span>
+            <span class="toggle-label">Show Timer</span>
+          </label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="enable-score-main" />
+            <span class="slider"></span>
+            <span class="toggle-label">Show Score</span>
+          </label>
+          <div class="problem-count-wrapper">
+            <span class="toggle-label">Problem Count:</span>
+            <button type="button" class="count-btn minus">−</button>
+            <input type="number" id="problem-count-main" min="1" max="15" value="4" />
+            <button type="button" class="count-btn plus">+</button>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="controls">
- <button class="glow-btn" onclick="renderProblems()">Set Problems</button>
-    <button class="glow-btn" onclick="showAllAnswers()">Show All Answers</button>
-      <div id="timer-main" class="timer" style="display:none;"></div>
-      <div id="score-main" class="score" style="display:none;">Score: 0 / 4</div>
-    </div>
-
-    <div id="main-problems"></div>
-  </div>
-
-  <!-- 🧩 Surface Area / Volume Tab -->
-  <div id="geometry-tab-wrapper" class="tab-wrapper">
-    <div class="settings" id="geometry-settings">
-      <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
-      <div class="settings-body" id="settings-body-geometry">
-        <label class="toggle-switch">
-          <input type="checkbox" id="enable-timer-geometry" />
-          <span class="slider"></span>
-          <span class="toggle-label">Show Timer</span>
-        </label>
-        <label class="toggle-switch">
-          <input type="checkbox" id="enable-score-geometry" />
-          <span class="slider"></span>
-          <span class="toggle-label">Show Score</span>
-        </label>
-        <div class="problem-count-wrapper">
-          <span class="toggle-label">Problem Count:</span>
-          <button type="button" class="count-btn minus">−</button>
-          <input type="number" id="problem-count-geometry" min="1" max="15" value="4" />
-          <button type="button" class="count-btn plus">+</button>
+      <div class="controls">
+        <button class="glow-btn" onclick="renderProblems()">Set Problems</button>
+        <button class="glow-btn" onclick="showAllAnswers()">Show All Answers</button>
+        <div id="timer-main" class="timer" style="display:none;"></div>
+        <div id="score-main" class="score" style="display:none;">Score: 0 / 4</div>
+      </div>
+      <div id="main-problems"></div>
+    </section>
+    <section id="geometry-tab-wrapper" class="tab-wrapper">
+      <div class="settings" id="geometry-settings">
+        <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
+        <div class="settings-body" id="settings-body-geometry">
+          <label class="toggle-switch">
+            <input type="checkbox" id="enable-timer-geometry" />
+            <span class="slider"></span>
+            <span class="toggle-label">Show Timer</span>
+          </label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="enable-score-geometry" />
+            <span class="slider"></span>
+            <span class="toggle-label">Show Score</span>
+          </label>
+          <div class="problem-count-wrapper">
+            <span class="toggle-label">Problem Count:</span>
+            <button type="button" class="count-btn minus">−</button>
+            <input type="number" id="problem-count-geometry" min="1" max="15" value="4" />
+            <button type="button" class="count-btn plus">+</button>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="controls">
-      <button class="glow-btn" onclick="renderGeometryTab()">Set Problems</button>
-      <button class="glow-btn" onclick="showAllSurfaceAnswers()">Show All Answers</button>
-      <div id="timer-geometry" class="timer" style="display:none;"></div>
-      <div id="score-geometry" class="score" style="display:none;">Score: 0 / 4</div>
-    </div>
-
-    <div id="geometry-problems"></div>
-  </div>
-
-  <!-- 🔌 Ohm's Law Tab -->
-<div id="ohm-tab-wrapper" class="tab-wrapper">
-  <div class="settings" id="ohm-settings">
-    <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
-    <div class="settings-body" id="settings-body-ohm">
-      <label class="toggle-switch">
-        <input type="checkbox" id="enable-timer-ohm" />
-        <span class="slider"></span>
-        <span class="toggle-label">Show Timer</span>
-      </label>
-      <label class="toggle-switch">
-        <input type="checkbox" id="enable-score-ohm" />
-        <span class="slider"></span>
-        <span class="toggle-label">Show Score</span>
-      </label>
-      <div class="problem-count-wrapper">
-        <span class="toggle-label">Problem Count:</span>
-        <button type="button" class="count-btn minus">−</button>
-        <input type="number" id="problem-count-ohm" min="1" max="15" value="4" />
-        <button type="button" class="count-btn plus">+</button>
+      <div class="controls">
+        <button class="glow-btn" onclick="renderGeometryTab()">Set Problems</button>
+        <button class="glow-btn" onclick="showAllSurfaceAnswers()">Show All Answers</button>
+        <div id="timer-geometry" class="timer" style="display:none;"></div>
+        <div id="score-geometry" class="score" style="display:none;">Score: 0 / 4</div>
       </div>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button class="glow-btn" onclick="renderOhmTab()">Set Problems</button>
-    <button class="glow-btn" onclick="showAllOhmAnswers()">Show All Answers</button>
-    <div id="timer-ohm" class="timer" style="display:none;"></div>
-    <div id="score-ohm" class="score" style="display:none;">Score: 0 / 4</div>
-  </div>
-
-  <div id="ohm-problems"></div>
-</div>
-
-<!-- ⚡ Quizzes -->
-<div id="quizzes-tab-wrapper" class="tab-wrapper">
-  <div class="quiz-selector-container">
-    <h2 class="quiz-title">📘 Select Quiz</h2>
-    <select id="quiz-select">
-      <option value="quiz1">quiz1</option>
-      <option value="quiz2">AESF Plating Quiz 2</option>
-      <option value="quiz3">quiz3</option>
-      <option value="quiz4">quiz4</option>
-    </select>
-  </div>
-  <div id="quizzes-problems"></div>
-</div>
-
-<!-- ⚡ Faraday's Law Tab -->
-<div id="faraday-tab-wrapper" class="tab-wrapper">
-
-  <!-- ⚙️ Settings Panel -->
-  <div class="settings" id="faraday-settings">
-    <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
-    <div class="settings-body" id="settings-body-faraday">
-      <label class="toggle-switch">
-        <input type="checkbox" id="enable-timer-faraday" />
-        <span class="slider"></span>
-        <span class="toggle-label">Show Timer</span>
-      </label>
-      <label class="toggle-switch">
-        <input type="checkbox" id="enable-score-faraday" />
-        <span class="slider"></span>
-        <span class="toggle-label">Show Score</span>
-      </label>
-      <div class="problem-count-wrapper">
-        <span class="toggle-label">Problem Count:</span>
-        <button type="button" class="count-btn minus">−</button>
-        <input type="number" id="problem-count-faraday" min="1" max="15" value="4" />
-        <button type="button" class="count-btn plus">+</button>
+      <div id="geometry-problems"></div>
+    </section>
+    <section id="ohm-tab-wrapper" class="tab-wrapper">
+      <div class="settings" id="ohm-settings">
+        <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
+        <div class="settings-body" id="settings-body-ohm">
+          <label class="toggle-switch">
+            <input type="checkbox" id="enable-timer-ohm" />
+            <span class="slider"></span>
+            <span class="toggle-label">Show Timer</span>
+          </label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="enable-score-ohm" />
+            <span class="slider"></span>
+            <span class="toggle-label">Show Score</span>
+          </label>
+          <div class="problem-count-wrapper">
+            <span class="toggle-label">Problem Count:</span>
+            <button type="button" class="count-btn minus">−</button>
+            <input type="number" id="problem-count-ohm" min="1" max="15" value="4" />
+            <button type="button" class="count-btn plus">+</button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <!-- 🔧 Controls + Problems -->
+      <div class="controls">
+        <button class="glow-btn" onclick="renderOhmTab()">Set Problems</button>
+        <button class="glow-btn" onclick="showAllOhmAnswers()">Show All Answers</button>
+        <div id="timer-ohm" class="timer" style="display:none;"></div>
+        <div id="score-ohm" class="score" style="display:none;">Score: 0 / 4</div>
+      </div>
+      <div id="ohm-problems"></div>
+    </section>
+    <section id="faraday-tab-wrapper" class="tab-wrapper">
+      <div class="settings" id="faraday-settings">
+        <div class="settings-header" onclick="toggleSettingsPanel(this)">⚙️ Settings</div>
+        <div class="settings-body" id="settings-body-faraday">
+          <label class="toggle-switch">
+            <input type="checkbox" id="enable-timer-faraday" />
+            <span class="slider"></span>
+            <span class="toggle-label">Show Timer</span>
+          </label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="enable-score-faraday" />
+            <span class="slider"></span>
+            <span class="toggle-label">Show Score</span>
+          </label>
+          <div class="problem-count-wrapper">
+            <span class="toggle-label">Problem Count:</span>
+            <button type="button" class="count-btn minus">−</button>
+            <input type="number" id="problem-count-faraday" min="1" max="15" value="4" />
+            <button type="button" class="count-btn plus">+</button>
+          </div>
+        </div>
+      </div>
       <div class="controls">
         <button class="glow-btn" onclick="renderFaradayTab()">Set Problems</button>
         <button class="glow-btn" onclick="showAllFaradayAnswers()">Show All Answers</button>
@@ -227,18 +146,99 @@
         <div id="score-faraday" class="score" style="display:none;">Score: 0 / 4</div>
       </div>
       <div id="faraday-problems"></div>
-    </div>
+    </section>
+    <section id="quizzes-tab-wrapper" class="tab-wrapper">
+      <div class="quiz-selector-container">
+        <h2 class="quiz-title">📘 Select Quiz</h2>
+        <select id="quiz-select">
+          <option value="quiz1">quiz1</option>
+          <option value="quiz2">AESF Plating Quiz 2</option>
+          <option value="quiz3">quiz3</option>
+          <option value="quiz4">quiz4</option>
+        </select>
+      </div>
+      <div id="quizzes-problems"></div>
+    </section>
+    <section id="videos-tab-wrapper" class="tab-wrapper">
+      <div class="controls">
+        <label for="video-select">Choose a Video:</label>
+        <select id="video-select">
+          <option value="">-- Select Video --</option>
+          <option value="364792031">Plating Essentials 06 - Electrochemistry</option>
+          <option value="371427894">Plating Essentials 07 - Anodes and Racks</option>
+          <option value="367027975">Plating Essentials 08 - Rack care and Maintenance</option>
+          <option disabled>──────────</option>
+          <option disabled>Plating Essentials 01–05 coming soon</option>
+          <option disabled>Plating Essentials 09–10 coming soon</option>
+        </select>
+      </div>
+      <div class="video-container" style="position: relative; max-width: 800px; margin: 2rem auto;">
+        <iframe 
+          id="vimeo-player" 
+          src="https://player.vimeo.com/video/364792031?controls=0&transparent=0"
+          frameborder="0" 
+          allow="autoplay; fullscreen; picture-in-picture" 
+          allowfullscreen
+          style="width: 100%; height: 450px; background: #000;">
+        </iframe>
+        <div id="custom-controls" style="position: absolute; bottom: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px;">
+          <button id="play-pause" style="font-size: 1.6rem; padding: 8px 14px;">▶️</button>
+          <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1" style="flex: 1; accent-color: purple;" />
+          <span id="current-time" style="color: white; font-size: 0.9rem;">0:00</span>
+          <button id="mute-btn">🔈</button>
+          <button id="pip-btn">📺</button>
+          <button id="fullscreen-btn">⛶</button>
+        </div>
+      </div>
+    </section>
+    <section id="tools-tab-wrapper" class="tab-wrapper">
+      <div class="controls">
+        <label for="tool-select" class="tool-select-label">Select Tool:</label>
+<div class="tool-toggle-buttons" style="margin-bottom: 20px; display: flex; gap: 10px; justify-content: center;">
+  <button id="toggle-metal" class="glow-btn">🔬 Metal Chart</button>
+  <button id="toggle-convert" class="glow-btn">📏 Unit Converter</button>
+</div>
+      </div>
+      <!-- Metal Chart Panel -->
+    <div id="tool-metal" class="tool-panel" style="display: none;">
+     <div class="panel-header" id="metal-drag-handle">🧪 Metal Chart</div>
+     <div id="metal-chart"></div>
   </div>
-</div>
-
-<!-- 🌐 Periodic Table Overlay -->
-<div id="periodic-overlay" class="periodic-overlay">
-  <button class="close-overlay">✕</button>
-  <img id="periodic-image" src="Images/PeriodicTable.png" alt="Periodic Table">
-</div>
-
-
-  <!-- ✅ Main JavaScript -->
-  <script src="../Script/main.js" id="active-script"></script>
-</body>
+      </div>
+      <!-- Unit Converter Panel -->
+      <div id="tool-convert" class="tool-panel" style="display: none;">
+       <div class="panel-header" id="convert-drag-handle">📏 Unit Converter</div> <!-- ✅ ADD THIS LINE -->
+       <div class="unit-converter">
+          <label for="conversion-type">Conversion Type:</label>
+          <select id="conversion-type">
+            <option value="length">Length</option>
+            <option value="mass">Mass</option>
+            <option value="temperature">Temperature</option>
+          </select>
+          <div class="conversion-fields">
+            <input type="number" id="input-value" placeholder="Enter value" />
+            <select id="input-unit"></select>
+            <input type="text" id="output-value" readonly />
+            <select id="output-unit"></select>
+          </div>
+        </div>
+      </div>
+    </section>
+    </main>
+    <div class="video-blocker" style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: transparent;
+      z-index: 5;
+    "></div>
+    <div id="periodic-overlay" class="periodic-overlay">
+      <button class="close-overlay">✕</button>
+      <img id="periodic-image" src="Images/PeriodicTable.png" alt="Periodic Table" />
+    </div>
+    <script src="../Script/main.js" id="active-script"></script>
+  </body>
 </html>
